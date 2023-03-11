@@ -6,7 +6,7 @@ namespace SolarCalculator
     {
 
         //need to store the data of all the values
-
+        private static double JulianNumDayOffset = 2415018.5;
         //TODO accept time zone now its alwa
         public LocationSolarData InputData { get; set; }
         public double JulianDay { get; set; }
@@ -20,7 +20,7 @@ namespace SolarCalculator
         {
             //excel number of days for the julian offset from normaldate
             //2415018.5
-            return dt.ToOADate() + 2415018.5;
+            return dt.ToOADate() + JulianNumDayOffset;
             
         }
         public double CalcJulianDay_TimeZone(double timeZoneOffset)
