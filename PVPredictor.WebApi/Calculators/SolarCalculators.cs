@@ -7,6 +7,7 @@ namespace SolarCalculator
 
         //need to store the data of all the values
         private static double JulianNumDayOffset = 2415018.5;
+        private static double JulianCenturyInDays = 2451545;
         //TODO accept time zone now its alwa
         public LocationSolarData InputData { get; set; }
         public double JulianDay { get; set; }
@@ -29,6 +30,11 @@ namespace SolarCalculator
         }
 
         private double JulianCentury;
+
+        public void CalcJulianCentury()
+        {
+
+        }
         private double GeomMeanLongSun;
         private double GeomMeanAnomSun;
         private double EccentEarthOrbit;
