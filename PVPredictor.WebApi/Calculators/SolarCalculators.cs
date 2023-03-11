@@ -47,8 +47,18 @@ namespace SolarCalculator
             return (JulianDay - juliandayoffset) / CenturyNumberOfDays;
         }
         
+        public void SetGeomMeanLon_degSun()
+        {
+            this.GeomMeanLongSun_deg = CalcGeomMeanLongSun_deg(this.JulianCentury);
 
-        private double GeomMeanLongSun;
+        }
+        //=MOD(280.46646+I2*(36000.76983+I2*0.0003032),360)
+        public double CalcGeomMeanLongSun_deg(double JulianCentury)
+        {
+            return (280.46646+ JulianCentury * (36000.76983+ JulianCentury * 0.0003032)) % 360;
+        }
+
+        private double GeomMeanLongSun_deg;
         private double GeomMeanAnomSun;
         private double EccentEarthOrbit;
         private double SunEqOfCtr;
