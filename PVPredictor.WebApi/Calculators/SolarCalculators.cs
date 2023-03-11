@@ -7,12 +7,15 @@ namespace SolarCalculator
 
         //need to store the data of all the values
         private static double JulianNumDayOffset = 2415018.5;
-        private static double JulianCenturyInDays = 2451545;
+        //
+        private static double JulianCenturyUnit = 2451545;
+
+        private static double CenturyNumberOfDays = 36525;
         //TODO accept time zone now its alwa
         public LocationSolarData InputData { get; set; }
         public double JulianDay { get; set; }
 
-        public void CalcJulianDay()
+        public void SetJulianDay()
         {
             this.JulianDay = CalcJulianDay_Date(this.InputData.dt) - CalcJulianDay_TimeZone(this.InputData.TimeZoneOffset);
         }
@@ -29,12 +32,22 @@ namespace SolarCalculator
             return timeZoneOffset / 24;
         }
 
-        private double JulianCentury;
+        public double JulianCentury { get; set; }
 
-        public void CalcJulianCentury()
+        //todo make this none dependant on julianDay
+        public void SetJulianCentury()
         {
+            //TODO find out what this const is
 
+            this.JulianCentury = CalcJulianCentury(this.JulianDay);
         }
+        public double CalcJulianCentury(double JulianDay)
+        {
+            double juliandayoffset = 2451545;
+            return (JulianDay - juliandayoffset) / CenturyNumberOfDays;
+        }
+        
+
         private double GeomMeanLongSun;
         private double GeomMeanAnomSun;
         private double EccentEarthOrbit;

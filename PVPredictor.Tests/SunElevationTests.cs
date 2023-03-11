@@ -15,7 +15,7 @@ public class SunElevationTests
         Console.WriteLine("locationSolarData.dt = " + locationSolarData.dt.ToShortDateString() + " " + locationSolarData.dt.ToShortTimeString());
         SunElevation sunElevation = new SunElevation(locationSolarData);
 
-        sunElevation.CalcJulianDay();
+        sunElevation.SetJulianDay();
 
         double expected_julianDay = 2455368.795833;
 
@@ -51,4 +51,20 @@ public class SunElevationTests
         Assert.AreEqual(expected_julianDay_TimeZoneOffset, Math.Round(sunElevation.CalcJulianDay_TimeZone(locationSolarData.TimeZoneOffset), 10, MidpointRounding.AwayFromZero));
 
     }
+
+    [TestMethod]
+    public void TestJulianCentury()
+    {
+        // I should be able to create a SunEvaluation without supplying the data for testing
+        LocationSolarData locationSolarData = new LocationSolarData();
+        SunElevation sunElevation = new SunElevation(locationSolarData);
+
+        //based on 21/06/2010 0:06:0.0 with -7 timezone -7
+        double test_julianDay = 2455368.795833;
+        double expectedJulianCentury = 0.10468982;
+
+
+        Assert.AreEqual(expectedJulianCentury, Math.Round(sunElevation.CalcJulianCentury(test_julianDay), 8, MidpointRounding.AwayFromZero));
+    }
+
 }
