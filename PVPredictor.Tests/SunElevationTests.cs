@@ -73,11 +73,24 @@ public class SunElevationTests
         LocationSolarData locationSolarData = new LocationSolarData();
         SunElevation sunElevation = new SunElevation(locationSolarData);
 
-        double test_julianCentury = 0.10468982;
+        double testJulianCentury = 0.10468982;
 
         double expectedGeomMeanLongSun = 89.38073226;
 
-        Assert.AreEqual(expectedGeomMeanLongSun, sunElevation.CalcGeomMeanLongSun_deg(test_julianCentury));
+        Assert.AreEqual(expectedGeomMeanLongSun, sunElevation.CalcGeomMeanLongSun_deg(testJulianCentury));
     }
 
+    [TestMethod]
+    public void TestGeomMeanAnomSun_deg()
+    {
+        LocationSolarData locationSolarData = new LocationSolarData();
+        SunElevation sunElevation = new SunElevation(locationSolarData);
+
+        double expectedGeomMeanAnomSun_deg = 4126.263359;
+
+        double testJulianCentury = 0.10468982
+;
+
+        Assert.AreEqual(expectedGeomMeanAnomSun_deg, Math.Round( sunElevation.CalcGeomMeanAnomSun_deg(testJulianCentury), 6, MidpointRounding.AwayFromZero));
+    }
 }
