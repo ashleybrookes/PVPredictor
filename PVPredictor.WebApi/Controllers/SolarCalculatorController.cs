@@ -9,7 +9,7 @@ using System.Collections;
 namespace SolarCalculator.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class SolarCalculatorController : ControllerBase
     {
         private readonly ILogger<SolarCalculatorController> _logger;

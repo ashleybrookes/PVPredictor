@@ -1,13 +1,24 @@
+using PVPredictor.WebApi.Models;
+using PVPredictor.WebApi.Services;
+
 namespace SolarCalculator
 {
 public class Program 
 {
     public static void Main(string[] args) {
-        var builder = CreateHostBulder(args);
+        var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddControllers();
+
+            builder.Services.Configure<PVPredictorDatabaseSettings>(
+            builder.Configuration.GetSection("PVPredictorDatabase"));               
         
+            builder.Services.AddSingleton<CitiesService>();
+
         var app = builder.Build();
-        app.Run();
+            app.MapControllers();
+
+            app.Run();
     }
 
     public static IHostBuilder CreateHostBulder(string[] args ) =>
