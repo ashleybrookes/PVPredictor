@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVPredictor.Tests", "PVPredictor.Tests\PVPredictor.Tests.csproj", "{B8F9EDD2-F3EE-4F1E-BE59-050067940B1C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVPredictor.WebApi", "PVPredictor.WebApi\PVPredictor.WebApi.csproj", "{74281276-B55C-42AD-BDC4-2B95F46D9234}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PVPredictor.WebAPI", "PVPredictor.WebApi\PVPredictor.WebAPI.csproj", "{74281276-B55C-42AD-BDC4-2B95F46D9234}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

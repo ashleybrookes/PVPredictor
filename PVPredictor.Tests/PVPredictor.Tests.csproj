@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PVPredictor.WebApi\PVPredictor.WebApi.csproj" />
+    <ProjectReference Include="..\PVPredictor.WebApi\PVPredictor.WebAPI.csproj" />
   </ItemGroup>
 
 </Project>
