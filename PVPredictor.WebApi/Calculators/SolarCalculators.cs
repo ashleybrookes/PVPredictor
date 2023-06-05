@@ -1,4 +1,5 @@
 using PVPredictor.WebAPI.Calculators;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using static PVPredictor.WebAPI.Calculators.Trigonometry;
 
@@ -7,10 +8,9 @@ namespace SolarCalculator
     public class SunElevation
     {
         //need to store the data of all the values
-        private static double JulianNumDayOffset = 2415018.5;
-        private static double JulianCenturyUnit = 2451545;
-        private static double CenturyNumberOfDays = 36525;
-        //TODO accept time zone now its alwa
+        private readonly double JulianNumDayOffset = 2415018.5;
+        private readonly double JulianCenturyUnit = 2451545;
+        private readonly double CenturyNumberOfDays = 36525;
         public LocationSolarData InputData { get; set; }
         public double JulianDay { get; set; }
 
@@ -47,7 +47,7 @@ namespace SolarCalculator
         }
 
         private double GeomMeanLongSun_deg;
-        public void SetGeomMeanLon_degSun()
+        public void SetGeomMeanLongSun_deg()
         {
             this.GeomMeanLongSun_deg = GetGeomMeanLongSun_deg(this.JulianCentury);
 
@@ -60,7 +60,7 @@ namespace SolarCalculator
         
         private double GeomMeanAnomSun_deg;
 
-        public void SetGeomMeanLongSun_deg()
+        public void SetGeomMeanAnomSun_deg()
         {
             this.GeomMeanAnomSun_deg = GetGeomMeanAnomSun_deg(this.JulianCentury);
         }
@@ -293,20 +293,130 @@ namespace SolarCalculator
 
         private double SolarElevationAngle_deg;
 
+        public void SetSolarElevationAngle_deg()
+        {
+            SolarElevationAngle_deg = GetSolarElevationAngle_deg(SolarZenithAngle_deg);
+        }
+        public double GetSolarElevationAngle_deg(double SolarZenithAngle_deg)
+        {
+            return 90 - SolarZenithAngle_deg;
+        }
         private double ApproxAtmosphericRefraction_deg;
-        private double SolarElevationCorrectedForAtmRefraction_deg;
-        private double SolarAzimuthAngle_degCwFromN;
+        public void SetApproxAtmosphericRefraction_deg()
+        {
+            ApproxAtmosphericRefraction_deg = GetApproxAtmosphericRefraction_deg(SolarElevationAngle_deg);
+        }
+        public double GetApproxAtmosphericRefraction_deg(double SolarElevationAngle_deg)
+        {
+            //IF(AG2>85,0,IF(AG2>5,58.1/TAN(RADIANS(AG2))-0.07/POWER(TAN(RADIANS(AG2)),3)+0.000086/POWER(TAN(RADIANS(AG2)),5),IF(AG2>-0.575,1735+AG2*(-518.2+AG2*(103.4+AG2*(-12.79+AG2*0.711))),-20.772/TAN(RADIANS(AG2)))))/3600    
+           if (SolarElevationAngle_deg > 85)
+            {
+                return 0;
+            }
+            if (SolarElevationAngle_deg > 5)
+            {
+                return (58.1 / Math.Tan(ConvertDegreesToRadians(SolarElevationAngle_deg)) - 0.07 / Math.Pow(Math.Tan(ConvertDegreesToRadians(SolarElevationAngle_deg)), 3) + 0.000086 / Math.Pow(Math.Tan(ConvertDegreesToRadians(SolarElevationAngle_deg)), 5)) / 3600;
+            }
+            if (SolarElevationAngle_deg > -0.575) {
+                return (1735 + SolarElevationAngle_deg * (-518.2 + SolarElevationAngle_deg * (103.4 + SolarElevationAngle_deg * (-12.79 + SolarElevationAngle_deg * 0.711)))) / 3600;
+            }
+            return (-20.772 / Math.Tan(ConvertDegreesToRadians(SolarElevationAngle_deg))) / 3600;
+
+        }
+
+        public double SolarElevationCorrectedForAtmRefraction_deg;
+
+        public void SetSolarElevationCorrectedForAtmRefraction_deg()
+        {
+            SolarElevationCorrectedForAtmRefraction_deg = GetSolarElevationCorrectedForAtmRefraction_deg(SolarZenithAngle_deg, ApproxAtmosphericRefraction_deg);
+        }
+        public double GetSolarElevationCorrectedForAtmRefraction_deg(double SolarZenithAngle_deg, double ApproxAtmosphericRefraction_deg)
+        {
+            return SolarElevationAngle_deg + ApproxAtmosphericRefraction_deg;
+        }
+
+        public double SolarAzimuthAngle_degCwFromN;
+
+        public void SetSolarAzimuthAngle_degCwFromN()
+        {
+            SolarAzimuthAngle_degCwFromN = GetSolarAzimuthAngle_degCwFromN(SolarZenithAngle_deg, HourAngle_deg, SunDeclin_deg, InputData.latitude);
+        }
+        public double GetSolarAzimuthAngle_degCwFromN(double SolarZenithAngle_deg, double HourAngle_deg, double SunDeclin_deg, double Latitude)
+        {
+            if (HourAngle_deg > 0)
+            {
+                return (ConvertRadiansToDegrees(Math.Acos(((Math.Sin(ConvertDegreesToRadians(Latitude)) * Math.Cos(ConvertDegreesToRadians(SolarZenithAngle_deg))) - Math.Sin(ConvertDegreesToRadians(SunDeclin_deg))) / (Math.Cos(ConvertDegreesToRadians(Latitude)) * Math.Sin(ConvertDegreesToRadians(SolarZenithAngle_deg))))) + 180) % 360;                
+            }
+
+            return (540 - ConvertRadiansToDegrees(Math.Acos(((Math.Sin(ConvertDegreesToRadians(Latitude)) * Math.Cos(ConvertDegreesToRadians(SolarZenithAngle_deg))) - Math.Sin(ConvertDegreesToRadians(SunDeclin_deg))) / (Math.Cos(ConvertDegreesToRadians(Latitude)) * Math.Sin(ConvertDegreesToRadians(SolarZenithAngle_deg)))))) % 360;
+        }
 
         public SunElevation(LocationSolarData locationData)
         {
             this.InputData = locationData;
         }
+        public void SetSunElevationData()
+        {
+            SetJulianDay();
+            SetJulianCentury();
+            SetGeomMeanLongSun_deg();
+            SetGeomMeanAnomSun_deg();
+            SetEccentEartOrbit();
+            SetSunEqOfCtr();
+            SetSunTrueLong();
+            SetSunTrueAnom();
+            SetSunRadVector();
+            SetSunAppLong_deg();
+            SetMeanObliqEcliptic_deg();
+            SetObliqCorr_deg();
+            SetSunRtAscen_deg();
+            SetSunDeclin_deg();
+            SetVarY();
+            SetEqOfTime_minutes();
+            SetHASunrise_deg();
+            SetSolarNoon();
+            SetSunriseTime();
+            SetSunsetTime();
+            SetSunlightDuration_minutes();
+            SetTrueSolarTime_min();
+            SetHourAngle_deg();
+            SetSolarZenithAngle_deg();
+            SetSolarElevationAngle_deg();
+            SetApproxAtmosphericRefraction_deg();
+            SetSolarElevationCorrectedForAtmRefraction_deg();
+            SetSolarAzimuthAngle_degCwFromN();
+        }
 
-
+        
     }
 
-    public class AngleSunCalculator
+    public class DailySolar
     {
+        private LocationSolarData inputData { get; set; }
+        public DailySolar(LocationSolarData locationSolarData)
+        {
+            inputData = locationSolarData;
+            sunElevations = new Dictionary<TimeSpan, double>();
+        }
+
+        public void SetSunElevations()
+        {
+            //for evey 6minutes of the day we need to calcalate the sun elevation
+            DateTime startDT = new DateTime(inputData.dt.Year, inputData.dt.Month, inputData.dt.Day,0,0,0);
+            int increment = 6;
+            inputData.dt = startDT;
+            while(inputData.dt < startDT.AddDays(1))
+            {
+                inputData.dt = inputData.dt.AddMinutes(increment);
+                SunElevation sunElevation = new SunElevation(inputData);
+                sunElevation.SetSunElevationData();
+                sunElevations.Add(inputData.dt.TimeOfDay, sunElevation.SolarElevationCorrectedForAtmRefraction_deg);
+            }
+        }
+
+        public Dictionary<TimeSpan, double>? sunElevations { get; set; }
+
+        private Dictionary<TimeSpan, double>? SunAzimuthAngle_CWfromN { get; set; }
 
     }
 

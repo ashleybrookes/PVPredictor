@@ -36,7 +36,7 @@ namespace SolarCalculator.Controllers
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<LocationSolarData>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Get_IActionResult(string city)
+        public IActionResult Get(string city)
         {
             //todo make this return the data
             //look up example where we hand in the city maybe
@@ -52,7 +52,7 @@ namespace SolarCalculator.Controllers
             city = city.ToLower();
 
             //todo:load city data from json file
-            List<LocationSolarData> SolarData = new List<LocationSolarData>();
+            
 
             if (cityLatitudeCoordinates[city.ToLower()] == null) {
                 return NotFound();
@@ -69,16 +69,16 @@ namespace SolarCalculator.Controllers
             //get the formula
             //Max Solar Power at sea level at equator is 1000 W/m2 Watts per meter squared 361 Watts is lost through atmospheric absorption and reflection
 
-                //need to add 180 onto longitude to convert to 0-360 value
+            //need to add 180 onto longitude to convert to 0-360 value
 
             //https://en.wikipedia.org/wiki/Solar_irradiance#Derivation
+            DailySolar DailySolarData = new DailySolar(new LocationSolarData { dt = DateTime.Now, latitude = (double)cityLatitudeCoordinates[city], longitude = (double)cityLongitudeCoordinates[city], solarMaximum = 1, solarPercentage = 1, solarPowerWatts = 1 });
 
-            SolarData.Add(new SolarCalculator.LocationSolarData { dt = DateTime.Now, latitude = (double)cityLatitudeCoordinates[city], longitude = (double)cityLongitudeCoordinates[city] , solarMaximum = 1, solarPercentage = 1, solarPowerWatts = 1 });
-            
+            DailySolarData.SetSunElevations();
             
             
             //TODO put in code to change the values here 
-            return Ok(SolarData);
+            return Ok("123");
         }
     }
 }

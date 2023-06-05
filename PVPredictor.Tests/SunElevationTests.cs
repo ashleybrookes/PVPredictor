@@ -368,4 +368,78 @@ public class SunElevationTests
 
         Assert.AreEqual(expectedSolarZenithAngle_deg, Math.Round(sunElevation.GetSolarZenithAngle_deg(locationSolarData.latitude, testSunDeclin_deg, testHourAngle_deg), 12, MidpointRounding.AwayFromZero));
     }
+
+    [TestMethod]
+    public void TestGetApproxAtmosphericRefraction_degSolarElevationAngle_deg_116()
+    {
+        LocationSolarData locationSolarData = new LocationSolarData();
+        SunElevation sunElevation = new SunElevation(locationSolarData);
+
+        double testSolarElevationAngle_deg = 116.553762119181;
+        double expectedApproxAtmosphericRefraction_deg = 0;
+
+        Assert.AreEqual(expectedApproxAtmosphericRefraction_deg, Math.Round(sunElevation.GetApproxAtmosphericRefraction_deg(testSolarElevationAngle_deg), 12, MidpointRounding.AwayFromZero));
+    }
+    [TestMethod]
+    public void TestGetApproxAtmosphericRefraction_degSolarElevationAngle_deg_71()
+    {
+        LocationSolarData locationSolarData = new LocationSolarData();
+        SunElevation sunElevation = new SunElevation(locationSolarData);
+
+        double testSolarElevationAngle_deg = 71.936658016464200;
+        double expectedApproxAtmosphericRefraction_deg = 0.005262901095075;
+
+        Assert.AreEqual(expectedApproxAtmosphericRefraction_deg, Math.Round(sunElevation.GetApproxAtmosphericRefraction_deg(testSolarElevationAngle_deg), 15, MidpointRounding.AwayFromZero));
+    }   
+    [TestMethod]
+    public void TestGetApproxAtmosphericRefraction_degSolarElevationAngle_deg_4()
+    {
+        LocationSolarData locationSolarData = new LocationSolarData();
+        SunElevation sunElevation = new SunElevation(locationSolarData);
+
+        double testSolarElevationAngle_deg = 4.551200583349290;
+        double expectedApproxAtmosphericRefraction_deg = 0.171572873989836;
+
+        Assert.AreEqual(expectedApproxAtmosphericRefraction_deg, Math.Round(sunElevation.GetApproxAtmosphericRefraction_deg(testSolarElevationAngle_deg), 15, MidpointRounding.AwayFromZero));
+    }
+    [TestMethod]
+    public void TestGetApproxAtmosphericRefraction_deg_SolarElevationAngle_deg_minus1()
+    {
+        LocationSolarData locationSolarData = new LocationSolarData();
+        SunElevation sunElevation = new SunElevation(locationSolarData);
+
+        double testSolarElevationAngle_deg = -1.045760090100330;
+        double expectedApproxAtmosphericRefraction_deg = 0.316095382791944;
+
+        Assert.AreEqual(expectedApproxAtmosphericRefraction_deg, Math.Round(sunElevation.GetApproxAtmosphericRefraction_deg(testSolarElevationAngle_deg), 15, MidpointRounding.AwayFromZero));
+    }
+
+    [TestMethod]
+    public void TestGetSolarAzimuthAngle_degCwFromN_HourAngle_deg_minus178()
+    {
+        LocationSolarData locationSolarData = new LocationSolarData();
+        locationSolarData.latitude = 40;
+        SunElevation sunElevation = new SunElevation(locationSolarData);
+
+        double testSolarZenithAngle_deg = 116.553762119181;
+        double testHourAngle_deg = -178.928841894617;
+        double testSunDeclin_deg = 23.4383706192869;
+        double expectedGetSolarAzimuthAngle_degCwFromN = 1.0986711839;
+
+        Assert.AreEqual(expectedGetSolarAzimuthAngle_degCwFromN, Math.Round(sunElevation.GetSolarAzimuthAngle_degCwFromN(testSolarZenithAngle_deg,testHourAngle_deg,testSunDeclin_deg, locationSolarData.latitude), 10, MidpointRounding.AwayFromZero));
+    }
+    [TestMethod]
+    public void TestGetSolarAzimuthAngle_degCwFromN_HourAngle_deg_23()
+    {
+        LocationSolarData locationSolarData = new LocationSolarData();
+        locationSolarData.latitude = 40;
+        SunElevation sunElevation = new SunElevation(locationSolarData);
+
+        double testSolarZenithAngle_deg = 25.83935565829100;
+        double testHourAngle_deg = 23.54060336413160;
+        double testSunDeclin_deg = 23.43798906757820;
+        double expectedGetSolarAzimuthAngle_degCwFromN = 237.2204956268;
+
+        Assert.AreEqual(expectedGetSolarAzimuthAngle_degCwFromN, Math.Round(sunElevation.GetSolarAzimuthAngle_degCwFromN(testSolarZenithAngle_deg, testHourAngle_deg, testSunDeclin_deg, locationSolarData.latitude), 10, MidpointRounding.AwayFromZero));
+    }
 }

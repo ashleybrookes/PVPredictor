@@ -17,6 +17,5 @@
 
         public double solarMaximum { get; set; }
 
-
     }
 }
