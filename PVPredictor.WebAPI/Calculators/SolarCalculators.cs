@@ -293,7 +293,24 @@ namespace SolarCalculator
 
         private double SolarElevationAngle_deg;
 
+        public void SetSolarElevationAngle_deg()
+        {
+            SolarElevationAngle_deg = GetSolarElevationAngle_deg(SolarZenithAngle_deg);
+        }
+        public double GetSolarElevationAngle_deg(double SolarZenithAngle_deg)
+        {
+            return 90 - SolarZenithAngle_deg;
+        }
         private double ApproxAtmosphericRefraction_deg;
+        public void SetApproxAtmosphericRefraction_deg()
+        {
+            ApproxAtmosphericRefraction_deg = GetApproxAtmosphericRefraction_deg(SolarElevationAngle_deg);
+        }
+        public double GetApproxAtmosphericRefraction_deg(double SolarElevationAngle_deg)
+        {
+            //=IF(AG2>85,0,IF(AG2>5,58.1/TAN(RADIANS(AG2))-0.07/POWER(TAN(RADIANS(AG2)),3)+0.000086/POWER(TAN(RADIANS(AG2)),5),IF(AG2>-0.575,1735+AG2*(-518.2+AG2*(103.4+AG2*(-12.79+AG2*0.711))),-20.772/TAN(RADIANS(AG2)))))/3600
+            return 0.0;
+        }
         private double SolarElevationCorrectedForAtmRefraction_deg;
         private double SolarAzimuthAngle_degCwFromN;
 
