@@ -6,10 +6,10 @@
 
         public double TimeZoneOffset { get; set;}
 
-        public string? City { get; set; }
+        public string City { get; set; }
 
-        public double? latitude { get; set; }
-        public double? longitude { get; set; }
+        public double latitude { get; set; }
+        public double longitude { get; set; }
 
         public double solarPowerWatts { get; set; }
 

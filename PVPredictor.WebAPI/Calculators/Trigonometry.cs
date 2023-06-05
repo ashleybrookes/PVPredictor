@@ -4,8 +4,11 @@
     {
         public static double ConvertDegreesToRadians(double degrees)
         {
-            double radians = (Math.PI / 180) * degrees;
-            return (radians);
+            return (Math.PI / 180) * degrees;
+        }
+        public static double ConvertRadiansToDegrees(double radians)
+        {
+            return (180 / Math.PI) * radians;
         }
     }
 }
